@@ -1,12 +1,12 @@
 #include <cstdlib>
 #include <cstdio>
 #include <cstring>
+#include <sstream>
 
 #include <curlpp/cURLpp.hpp>
 #include <curlpp/Easy.hpp>
 #include <curlpp/Options.hpp>
 #include <curlpp/Exception.hpp>
-
 
 
 int main(int argc, char *argv[])
