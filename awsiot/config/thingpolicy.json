@@ -1,0 +1,15 @@
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Effect": "Allow",
+      "Action": "iot:AssumeRoleWithCertificate",
+      "Resource": "arn:aws:iot:*:*:rolealias/firehose-access-role-alias",
+      "Condition": {
+        "Bool": {
+          "iot:Connection.Thing.IsAttached": "true"
+        }
+      }
+    }
+  ]
+}

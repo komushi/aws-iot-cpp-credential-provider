@@ -31,8 +31,8 @@ int main(int argc, char *argv[])
 	{
 		url = argv[1];
 		thingName = argv[2];
-		certFile = "./cert/certificate.pem.crt";
-		keyName = "./cert/private.pem.key";
+		certFile = "./awsiot/cert/certificate.pem.crt";
+		keyName = "./awsiot/cert/private.pem.key";
 	}
 	else 
 	{

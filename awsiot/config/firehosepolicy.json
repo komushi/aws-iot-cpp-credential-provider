@@ -10,7 +10,7 @@
         "firehose:UpdateDestination"
       ],
       "Resource": [
-        "arn:aws:firehose:<aws_region>:<aws_account>:deliverystream/*"
+        "arn:aws:firehose:*:*:deliverystream/*"
       ]
     }
   ]

@@ -1,7 +1,7 @@
 # aws-iot-cpp-credential-provider
 ## Authorizing Direct Calls to AWS Services with AWS IoT Credentials Provider C++ example powered by curlpp and libcurl
 
-![architecture](asset/arch.png)
+![architecture](images/arch.png)
 
 
 ## 1. References
@@ -49,17 +49,23 @@ $ curlpp-config --cflags --libs
 $ g++ -std=c++11 src/example.cpp -o bin/iotcred -lcurl -lcurlpp
 ```
 
-## 3. [Prepare AWS IoT Settings](./AWSIOT.MD)
-
-## 4. Run
+## 3. Prepare AWS IoT Settings
 ```
-$ ./bin/iotcred https://<prefix>.credentials.iot.<aws_region>.amazonaws.com/role-aliases/firehose-access-role-alias/credentials thing002
-{
-  "credentials": {
-    "accessKeyId": "ASIAQTTDABVUXAQ6G5NN",
-    "secretAccessKey": "s6CGohGsuqtQlO0sxnaqB8lkXZIMlK44TGUB+xA4",
-    "sessionToken": "IQoJb3JpZ2luX2VjEPj//////////wEaDmFwLW5vcnRoZWFzdC0xIkcwRQIhAN2C1/NSqF7RDOy4/QjEa9FRzMG9FRCG2gNQ4fhOcVsGAiAkM9NbZCBuVLycHccyRb3caoPAkbHDU/52Sw2fD3cQPSrDAwgREAMaDDA0MjA4MzU1MjYxNyIMvsruGPxC8UTb4ZF5KqADeT2K2mBPmJgjHI8nJDos+MTRL0AISPEyDdudw0UPMqg1oy5Ontuu50rQqBIMhV42hpOwc2lDzEIsiGdxB7kJsJLGzVuikOQp7ZyBdCTZFonuWKB9Y4Ky0SugbZKiVxWn8SvIu0lrQkEtOh1S/vfDixN+QazPuSiwdgwMwnObx3Aos/fU8McreRyv5m3W1zlXyzDe3K7WsqIEjE6L7CkcZqoe2kvCjASmUELNgBI98KV6gL4Ni2MfTJXEc3czBPWaGy8eKmOLEPGsVI1KbR1yNRfyivkr3gsbPSGRbVcM4z1ELABXjOcRFthcBCgeuN9KKrpUMPFP+xcww/hMX2eKNn98mMjtIr0ycsuo77U30JoVTYgevlIYo/RJf8DPn2u2TZZdYTR8mwb26OFgu1euM1yuyRp4+l4FDtyOTOyqEiW9X3WJX3kv+35KEr62/UsesW1zGkhBiGNw74RvIEbar8RbwQpapRBnuV37ODtK2pZMA59/9Gq9mBulwsZOleo2YYuM1Lv1U0oiqfFG2tMdSc7Zqd8gjI5ptO0y31w/yW8wvMbA9AU6jAL6Whved4rLDTPR/SF/TGmFrv1tl+Urf1uze0PTmzpN0O6Ek56NYrUaRuOw50V9JCB7HNqs46YQ6CGSdiEimgEnHk9Vkqp6JNzu7KuEsXSATvnmDCw9jFPgEkE05OghX70u0rzqrshNvYDV/IeD3aJKWkcB8NI/hkPp+bBL1PHE0H/UZUlFBh4lUOTLDw46Eas1jjBPzaU0Q8ySmskR4LmG8JwjiMamIrY6SpxSjU3H5yCq3u/S1qwY+RhixMXymsSRAC99rV6gLBlq303yWOLPmq9K0ZLlVzKUEwzAfv7C3zeQmv8EkWUNa1VOsBLCcHnbx4OHZlq79OCTTRxlySbc+A+19cQUT0ONRth/",
-    "expiration": "1920-12-10T08:41:48Z"
-  }
-}
+$ chmod +x awsiot/create_cert.sh
+$ chmod +x awsiot/clean_up.sh
+$ export $THING_NAME=<thing_name>
+$ source awsiot/create_cert.sh $THING_NAME
+```
+*[AWS IoT Settings Details](awsiot/AWSIOT.MD)*
+
+## 4. Get credential
+```
+$ eval "$(aws iot describe-endpoint --endpoint-type iot:CredentialProvider | jq -r '@sh "export CREDENTIAL_PROVIDER_ENDPOINT=https://\(.endpointAddress)/role-aliases/$ROLE_ALIAS/credentials"')"
+
+$ ./bin/iotcred $CREDENTIAL_PROVIDER_ENDPOINT $THING_NAME
+```
+
+## 5. Clean up
+```
+$ awsiot/clean_up.sh
 ```
